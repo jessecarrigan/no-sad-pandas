@@ -1,0 +1,11 @@
+{
+  "name": "nsp-schedule-api",
+  "version": "1.0.0",
+  "description": "No Sad Pandas Initiative Schedule API",
+  "main": "index.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "author": "Jesse Carrigan",
+  "license": "ISC"
+}
