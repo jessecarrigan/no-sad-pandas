@@ -24,21 +24,29 @@ app.get('/meetings', function(req, res) {
 app.post('/meeting', function(req, res) {
   // Validate email
   if (!validator.isEmail(req.body.email)) {
-    res.status(400).send("Invalid email");
+    res.status(400).send({error: 'Invalid email'});
   }
   // Validate address
-  var isValidAddress = validateAddress(req.body.address);
-  if (!isValidAddress) {
-    res.status(400).send("Invalid address " + inexact);
+  var address = validateAddress(req.body.address);
+  if (!address.exact) {
+    res.status(400).send({error: 'Invalid address. Inexact matches: ' + inexact});
   }
+  // Validate contact name
   if (!req.body.contact) {
-    res.status(400).send("Missing contact name");
+    res.status(400).send({error: 'Missing contact name'});
   }
+  // 
   if (!req.body.datetime) {
-    res.status(400).send("Missing meeting time");
+    res.status(400).send({error: 'Missing meeting time'});
   }
-
-  res.send('New Schedule');
+  mongodb.collection('meetings').save(req.body, function(err, result) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({error: 'Internal server error'});
+      } else {
+        res.status(201).send(result);
+      }
+  });
 });
 
 // Update an existing meeting.
@@ -54,16 +62,14 @@ app.delete('/meeting/:id', function(req, res) {
 
 var validateAddress = function(address) {
   addressValidator.validate(address, addressValidator.match.streetAddress, function(err, exact, inexact){
-    console.log('input: ', address.toString())
-    console.log('match: ', _.map(exact, function(a) {
+    result = {};
+    result.input = address.toString();
+    result.exact = _.map(exact, function(a) {
       return a.toString();
-    }));
-    console.log('did you mean: ', _.map(inexact, function(a) {
+    });
+    result.inexact = _.map(inexact, function(a) {
       return a.toString();
-    }));
- 
-    //access some props on the exact match 
-    var first = exact[0];
-    console.log(first.streetNumber + ' '+ first.street);
+    });
+    return result;
   });
 };
