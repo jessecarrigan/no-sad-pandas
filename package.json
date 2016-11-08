@@ -2,13 +2,18 @@
   "name": "nsp-schedule-api",
   "version": "1.0.0",
   "description": "No Sad Pandas Initiative Schedule API",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "dev": "nodemon nsp-schedule-api/server.js",
     "test": "node server.js"
   },
   "author": "Jesse Carrigan",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
