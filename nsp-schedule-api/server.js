@@ -17,11 +17,20 @@ app.listen(3000, function() {
 
 // Get scheduled meetings.
 app.get('/meetings', function(req, res) {
-  res.send('Schedules');
+  db.collection('meetings').find().toArray(function(err, results) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({error: 'Internal server error'});
+    } else {
+      res.status(200).send(results);
+    }
 });
 
 // Create a new meeting.
 app.post('/meeting', function(req, res) {
+  if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
+      res.status(400).send({error: 'Missing meeting information'});
+  }
   // Validate email
   if (!validator.isEmail(req.body.email)) {
     res.status(400).send({error: 'Invalid email'});
@@ -31,29 +40,27 @@ app.post('/meeting', function(req, res) {
   if (!address.exact) {
     res.status(400).send({error: 'Invalid address. Inexact matches: ' + inexact});
   }
-  // Validate contact name
-  if (!req.body.contact) {
-    res.status(400).send({error: 'Missing contact name'});
-  }
-  // 
-  if (!req.body.datetime) {
-    res.status(400).send({error: 'Missing meeting time'});
-  }
   mongodb.collection('meetings').save(req.body, function(err, result) {
-      if (err) {
-        console.log(err);
-        res.status(500).send({error: 'Internal server error'});
-      } else {
-        res.status(201).send(result);
-      }
+    if (err) {
+      console.log(err);
+      res.status(500).send({error: 'Internal server error'});
+    } else {
+      res.status(201).send(result);
+    }
   });
 });
 
 // Update an existing meeting.
 app.put('/meeting/:id', function(req, res) {
-  res.send('Update Schedule');
+  mongodb.collection('meetings').save(req.body, function(err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({error: 'Internal server error'});
+    } else {
+      res.status(201).send(result);
+    }
+  });
 });
-
 
 // Delete a meeting.
 app.delete('/meeting/:id', function(req, res) {
