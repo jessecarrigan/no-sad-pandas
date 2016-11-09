@@ -1,10 +1,10 @@
 {
-  "name": "nsp-schedule-api",
+  "name": "nsp-meeting-api",
   "version": "1.0.0",
-  "description": "No Sad Pandas Initiative Schedule API",
-  "main": "server.js",
+  "description": "No Sad Pandas Initiative Meeting API",
+  "main": "nsp-meeting-api/server.js",
   "scripts": {
-    "dev": "nodemon nsp-schedule-api/server.js",
+    "dev": "nodemon nsp-meeting-api/server.js",
     "test": "node server.js"
   },
   "author": "Jesse Carrigan",

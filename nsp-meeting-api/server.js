@@ -9,8 +9,8 @@ var app = express();
 app.use(bodyParser.json());
 
 // Launch app server
-app.listen(3000, function() {
-  console.log('listening on 3000');
+app.listen(config.port, function() {
+  console.log('listening on ' + config.port);
 });
 
 var mongodb;
