@@ -13,6 +13,7 @@ app.listen(config.port, function() {
   console.log('listening on ' + config.port);
 });
 
+// Set up a mongo client
 var mongodb;
 MongoClient.connect(config.mongoConnection, function(err, database) {
   if (err) {
@@ -77,6 +78,7 @@ app.delete('/meeting/:id', function(req, res) {
   });
 });
 
+// Basic validation for input
 var validate = function(req, res) {
   if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
     return res.status(400).send({error: 'Missing meeting information'});
