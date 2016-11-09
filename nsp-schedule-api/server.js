@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var validator = require('validator');
+var moment = require('moment');
 var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
@@ -42,13 +43,12 @@ app.post('/meeting', function(req, res) {
     return res.status(400).send({error: 'Invalid email'});
   }
   // Check valid date
-  var datetime = new Date(req.body.datetime);
-  if (isNaN(datetime)) {
+  if (!moment().isValid(req.body.datetime)) {
     return res.status(400).send({error: 'Invalid date'});
   }
-  // Parse to get a UTC timezone in hours and store along with the meeting
+  // Parse to get a UTC timezone in minutes and store along with the meeting
   meeting = req.body;
-  meeting.timezone = datetime.getTimezoneOffset() / 60;
+  meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
   mongodb.collection('meetings').save(meeting, function(err, result) {
     if (err) {
       console.log(err);
@@ -61,7 +61,7 @@ app.post('/meeting', function(req, res) {
 
 // Update an existing meeting.
 app.put('/meeting/:id', function(req, res) {
-  
+
 });
 
 // Delete a meeting.
