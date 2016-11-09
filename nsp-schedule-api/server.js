@@ -34,15 +34,22 @@ app.get('/meetings', function(req, res) {
 
 // Create a new meeting.
 app.post('/meeting', function(req, res) {
-  if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime || !req.body.timezone) {
+  if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
     return res.status(400).send({error: 'Missing meeting information'});
   }
   // Validate email
   if (!validator.isEmail(req.body.email)) {
     return res.status(400).send({error: 'Invalid email'});
   }
-
-  mongodb.collection('meetings').save(req.body, function(err, result) {
+  // Check valid date
+  var datetime = new Date(req.body.datetime);
+  if (isNaN(datetime)) {
+    return res.status(400).send({error: 'Invalid date'});
+  }
+  // Parse to get a UTC timezone in hours and store along with the meeting
+  meeting = req.body;
+  meeting.timezone = datetime.getTimezoneOffset() / 60;
+  mongodb.collection('meetings').save(meeting, function(err, result) {
     if (err) {
       console.log(err);
       return res.status(500).send({error: 'Internal server error'});
@@ -54,6 +61,7 @@ app.post('/meeting', function(req, res) {
 
 // Update an existing meeting.
 app.put('/meeting/:id', function(req, res) {
+  
 });
 
 // Delete a meeting.
