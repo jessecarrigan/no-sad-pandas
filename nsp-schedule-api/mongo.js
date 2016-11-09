@@ -1,5 +1,5 @@
-const config = require('./config');
-const MongoClient = require('mongodb').MongoClient;
+var config = require('./config');
+var MongoClient = require('mongodb').MongoClient;
 
 var mongo = MongoClient.connect(config.mongoConnection, function(err, database) {
   if (err) {

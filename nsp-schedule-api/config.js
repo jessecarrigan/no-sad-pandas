@@ -1,4 +1,4 @@
 var config = {};
 
-config.mongoConnection = "mongodb://127.0.0.1:27017"
+config.mongoConnection = "mongodb://nosadpandas:nosadpandas@ds147377.mlab.com:47377/nsp-mongo"
 module.exports = config;

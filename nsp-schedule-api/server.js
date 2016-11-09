@@ -1,14 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const validator = require('validator');
-const addressValidator = require('address-validator');
-const Address = addressValidator.Address;
-const _ = require('underscore');
-const config = require('./config');
-const mongodb = require('./mongo');
-const app = express();
+var express = require('express');
+var bodyParser = require('body-parser');
+var validator = require('validator');
+var addressValidator = require('address-validator');
+var Address = addressValidator.Address;
+var _ = require('underscore');
+var config = require('./config');
+var mongodb = require('./mongo');
+var app = express();
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 // Launch app server
 app.listen(3000, function() {
@@ -20,10 +20,11 @@ app.get('/meetings', function(req, res) {
   db.collection('meetings').find().toArray(function(err, results) {
     if (err) {
       console.log(err);
-      res.status(500).send({error: 'Internal server error'});
+      res.status(500).send({error: 'Internal server error'});      
     } else {
       res.status(200).send(results);
     }
+  });
 });
 
 // Create a new meeting.
@@ -37,8 +38,8 @@ app.post('/meeting', function(req, res) {
   }
   // Validate address
   var address = validateAddress(req.body.address);
-  if (!address.exact) {
-    res.status(400).send({error: 'Invalid address. Inexact matches: ' + inexact});
+  if (address.exact === undefined || address.exact.length == 0) {
+    res.status(400).send({error: 'Invalid address. Inexact matches: ' + address.inexact});
   }
   mongodb.collection('meetings').save(req.body, function(err, result) {
     if (err) {
@@ -68,7 +69,11 @@ app.delete('/meeting/:id', function(req, res) {
 });
 
 var validateAddress = function(address) {
-  addressValidator.validate(address, addressValidator.match.streetAddress, function(err, exact, inexact){
+  return addressValidator.validate(new Address(address), addressValidator.match.streetAddress, function(err, exact, inexact){
+    if (err) {
+      console.log(err);
+      return;
+    }
     result = {};
     result.input = address.toString();
     result.exact = _.map(exact, function(a) {
