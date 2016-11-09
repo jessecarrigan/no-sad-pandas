@@ -26,7 +26,7 @@ app.get('/meetings', function(req, res) {
   mongodb.collection('meetings').find().toArray(function(err, results) {
     if (err) {
       console.log(err);
-      res.status(500).send({error: 'Internal server error'});      
+      res.status(500).send({error: err});      
     } else {
       res.status(200).send({meetings: results});
     }
@@ -35,6 +35,49 @@ app.get('/meetings', function(req, res) {
 
 // Create a new meeting.
 app.post('/meeting', function(req, res) {
+  validate(req, res);
+  // Parse to get a UTC timezone in minutes and store along with the meeting
+  meeting = req.body;
+  meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
+  mongodb.collection('meetings').save(meeting, function(err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({error: err});
+    } else {
+      return res.status(201).send(result);
+    }
+  });
+});
+
+// Update an existing meeting.
+app.put('/meeting/:id', function(req, res) {
+  validate(req, res);
+  // Parse to get a UTC timezone in minutes and store along with the meeting
+  meeting = req.body;
+  meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
+  mongodb.collection('meetings').updateOne({_id: new ObjectId(req.params.id)}, { $set: meeting }, function(err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({error: err});
+    } else {
+      return res.status(200).send(result);
+    }
+  });
+});
+
+// Delete a meeting.
+app.delete('/meeting/:id', function(req, res) {
+  mongodb.collection('meetings').deleteOne({_id: new ObjectId(req.params.id)}, function(err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({error: err});
+    } else {
+      return res.status(202).send(result);
+    }
+  });
+});
+
+var validate = function(req, res) {
   if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
     return res.status(400).send({error: 'Missing meeting information'});
   }
@@ -46,32 +89,4 @@ app.post('/meeting', function(req, res) {
   if (!moment().isValid(req.body.datetime)) {
     return res.status(400).send({error: 'Invalid date'});
   }
-  // Parse to get a UTC timezone in minutes and store along with the meeting
-  meeting = req.body;
-  meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
-  mongodb.collection('meetings').save(meeting, function(err, result) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send({error: 'Internal server error'});
-    } else {
-      return res.status(201).send(result);
-    }
-  });
-});
-
-// Update an existing meeting.
-app.put('/meeting/:id', function(req, res) {
-
-});
-
-// Delete a meeting.
-app.delete('/meeting/:id', function(req, res) {
-  mongodb.collection('meetings').deleteOne({_id: new ObjectId(req.params.id)}, function(err, result) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send({error: 'Internal server error'});
-    } else {
-      return res.status(202).send(result);
-    }
-  });
-});
+};
