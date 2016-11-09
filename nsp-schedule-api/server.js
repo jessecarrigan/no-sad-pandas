@@ -30,23 +30,18 @@ app.get('/meetings', function(req, res) {
 // Create a new meeting.
 app.post('/meeting', function(req, res) {
   if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
-      res.status(400).send({error: 'Missing meeting information'});
+    return res.status(400).send({error: 'Missing meeting information'});
   }
   // Validate email
   if (!validator.isEmail(req.body.email)) {
-    res.status(400).send({error: 'Invalid email'});
-  }
-  // Validate address
-  var address = validateAddress(req.body.address);
-  if (address.exact === undefined || address.exact.length == 0) {
-    res.status(400).send({error: 'Invalid address. Inexact matches: ' + address.inexact});
+    return res.status(400).send({error: 'Invalid email'});
   }
   mongodb.collection('meetings').save(req.body, function(err, result) {
     if (err) {
       console.log(err);
-      res.status(500).send({error: 'Internal server error'});
+      return res.status(500).send({error: 'Internal server error'});
     } else {
-      res.status(201).send(result);
+      return res.status(201).send(result);
     }
   });
 });
@@ -67,21 +62,3 @@ app.put('/meeting/:id', function(req, res) {
 app.delete('/meeting/:id', function(req, res) {
   res.send('Schedule Deleted');
 });
-
-var validateAddress = function(address) {
-  return addressValidator.validate(new Address(address), addressValidator.match.streetAddress, function(err, exact, inexact){
-    if (err) {
-      console.log(err);
-      return;
-    }
-    result = {};
-    result.input = address.toString();
-    result.exact = _.map(exact, function(a) {
-      return a.toString();
-    });
-    result.inexact = _.map(inexact, function(a) {
-      return a.toString();
-    });
-    return result;
-  });
-};
