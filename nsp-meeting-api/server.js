@@ -8,12 +8,12 @@ var ObjectId = require('mongodb').ObjectID;
 var app = express();
 app.use(bodyParser.json());
 
-// Launch app server
+// Launch app server.
 app.listen(config.port, function() {
   console.log('listening on ' + config.port);
 });
 
-// Set up a mongo client
+// Set up a mongo client.
 var mongodb;
 MongoClient.connect(config.mongoConnection, function(err, database) {
   if (err) {
@@ -40,12 +40,12 @@ app.post('/meeting', function(req, res) {
   // Parse to get a UTC timezone in minutes and store along with the meeting
   meeting = req.body;
   meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
-  mongodb.collection('meetings').save(meeting, function(err, result) {
+  mongodb.collection('meetings').insertOne(meeting, function(err, result) {
     if (err) {
       console.log(err);
       return res.status(500).send({error: err});
     } else {
-      return res.status(201).send(result);
+      return res.status(201).send({_id: result.ops[0]._id});
     }
   });
 });
@@ -56,12 +56,12 @@ app.put('/meeting/:id', function(req, res) {
   // Parse to get a UTC timezone in minutes and store along with the meeting
   meeting = req.body;
   meeting.timezone = moment.parseZone(req.body.datetime).utcOffset();
-  mongodb.collection('meetings').updateOne({_id: new ObjectId(req.params.id)}, { $set: meeting }, function(err, result) {
+  mongodb.collection('meetings').updateOne({_id: new ObjectId(req.params.id)}, {$set: meeting}, function(err, result) {
     if (err) {
       console.log(err);
       return res.status(500).send({error: err});
     } else {
-      return res.status(200).send(result);
+      return res.status(200).send({updated: result.result.n});
     }
   });
 });
@@ -73,12 +73,12 @@ app.delete('/meeting/:id', function(req, res) {
       console.log(err);
       return res.status(500).send({error: err});
     } else {
-      return res.status(202).send(result);
+      return res.status(202).send({deleted: result.result.n});
     }
   });
 });
 
-// Basic validation for input
+// Basic validation for input.
 var validate = function(req, res) {
   if (!req.body.email || !req.body.address || !req.body.contact || !req.body.datetime) {
     return res.status(400).send({error: 'Missing meeting information'});
