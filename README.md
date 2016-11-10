@@ -15,6 +15,7 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 - `npm install` to pull in the dependencies for the project.
 - You can edit `config.js` to set the port for the server and the location of your MongoDB instance. These are defaulted to 3000 and localhost:27017, respectively.
 - Run `npm start` from the main folder containing the `package.json` file.
+- If you use [Postman](https://www.getpostman.com/), a collection has been included for testing.
 
 # API Documentation
 
