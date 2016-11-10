@@ -135,5 +135,6 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 
 - It would be great if this abstracted the database better. Right now, the use of MongoDB is baked into the API due to good support in Node, but if we wanted to change the database it would involve some refactoring.
 - Validating email is included and is a pretty basic operation that seems reasonable. Having validation on the location would be good as well, perhaps through the Google Maps API (requires setting up developer/API keys, so was not done here).
-- Error handling could be improved.
+- There's no auth or restrictions on the API, and given the information in the database (names, emails, etc.) it would probably be appropriate to have controls and security on it.
+
 
