@@ -7,6 +7,7 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 - [Node.js](http://nodejs.org/en/)
 - [npm](http://www.npmjs.com/)
 - [MongoDB](http://www.mongodb.com/)
+- various npm packages listed in package.json
 
 ## Getting Started
 
