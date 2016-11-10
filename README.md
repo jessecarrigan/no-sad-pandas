@@ -95,7 +95,10 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     ```
 - Error response
     - Status Code: 400
-      - Returns information about missing/invalid parameters.
+        - Content (example): 
+        ```
+        { "error": "Missing meeting information" }
+        ```   
     - Status Code: 500
       - Returns general error information.
 
@@ -114,11 +117,6 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     { "deleted": 1 }
     ```
 - Error response
-    - Status Code: 400
-        - Content (example): 
-        ```
-        { "error": "Missing meeting information" }
-        ```
     - Status Code: 500
         - Returns general error information.
 
