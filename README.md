@@ -31,13 +31,15 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 ```
 - Success response
     - Status Code: 200
-      Content: { "_id": "012345678910" }
-
+    - Content: 
+    ```
+    { "_id": "012345678910" }
+    ```
 - Error response
     - Status Code: 400
-      Will contain information about missing/invalid parameters.
+        - Will contain information about missing/invalid parameters.
     - Status Code: 500
-      General error information.
+        - General error information.
 
 ## Get scheduled meetings
 
@@ -63,7 +65,7 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     ```
 - Error response
     - Status Code: 500
-      General error information.
+      - General error information.
 
 ## Update a meeting
 
