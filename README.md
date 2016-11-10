@@ -85,7 +85,6 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 - Success response
     - Status Code: 200
       Content: { "updated": 1 }
-
 - Error response
     - Status Code: 400
       Returns information about missing/invalid parameters.
@@ -103,7 +102,6 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 - Success response
     - Status Code: 200
       Content: { "deleted": 1 }
-
 - Error response
     - Status Code: 400
       Will contain information about missing/invalid parameters.
@@ -114,7 +112,7 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 
 ## Technical assumptions
 
-- The API saves a UTC time value in the datetime field on a meeting object, and the timezone as +/- the minutes from GMT to allow conversion on viewing the meeting.
+- The API saves a local time value in the datetime field on a meeting object, and the timezone as +/- the minutes from GMT to allow conversion on viewing the meeting.
 - The datetime is assumed to be a date string in the format above.
 - No particular validation is performed on the name or address field, but email is validated. The date string is also checked to ensure it is a valid date that can be stored.
 
