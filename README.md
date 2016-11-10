@@ -20,15 +20,15 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     - meeting
 - Method
     - `POST`
-- Body example
-    ```
-    {
-        "contact": "Jesse Carrigan",
-        "email": "jesse.m.carrigan@gmail.com",
-        "address": "1006 East 58th Street, Tacoma, 98404, WA, US",
-        "datetime": "2016-11-08T10:00:00+08:00"
-    }
-    ```
+- Body example:
+```
+{
+    "contact": "Jesse Carrigan",
+    "email": "jesse@nosadpandas.com",
+    "address": "5500 Phinney Ave. N., Seattle, WA 98103",
+    "datetime": "2016-11-08T10:00:00+08:00"
+}
+```
 - Success response
     - Status Code: 200
       Content: { "_id": "012345678910" }
@@ -47,7 +47,7 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     - `GET`
 - Success response
     - Status Code: 200
-      Content: 
+    - Content: 
     ```
     {
         "meetings": [
@@ -74,22 +74,22 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
 - Parameters example
     - :id = 012345678910
 - Body example
-    ```
-    {
-        "contact": "Paul Carrigan",
-        "email": "paul.carrigan@gmail.com",
-        "address": "1006 East 58th Street, Tacoma, 98404, WA, US",
-        "datetime": "2016-11-08T10:00:00+08:00"
-    }
-    ```
+```
+{
+    "contact": "Paul Carrigan",
+    "email": "paul@nosadpandas.com",
+    "address": "5500 Phinney Ave. N., Seattle, WA 98103",
+    "datetime": "2016-11-08T10:00:00+08:00"
+}
+```
 - Success response
     - Status Code: 200
-      Content: { "updated": 1 }
+    - Content: { "updated": 1 }
 - Error response
     - Status Code: 400
-      Returns information about missing/invalid parameters.
+      - Returns information about missing/invalid parameters.
     - Status Code: 500
-      Returns general error information.
+      - Returns general error information.
 
 ## Delete a meeting
 
@@ -101,12 +101,12 @@ This API allows scheduling of meetings for No Sad Panda Initiative webinars.
     - :id = 012345678910
 - Success response
     - Status Code: 200
-      Content: { "deleted": 1 }
+    - Content: { "deleted": 1 }
 - Error response
     - Status Code: 400
-      Will contain information about missing/invalid parameters.
+        - Will contain information about missing/invalid parameters.
     - Status Code: 500
-      Returns general error information.
+        - Returns general error information.
 
 # Notes
 
